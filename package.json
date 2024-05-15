@@ -1,0 +1,23 @@
+{
+  "name": "licance-compliance-tool",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit.git"
+  },
+  "author": "Arif KARAKILIC",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit/issues"
+  },
+  "homepage": "https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit#readme",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "yargs": "^17.7.2"
+  }
+}
