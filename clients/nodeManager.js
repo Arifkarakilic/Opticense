@@ -1,16 +1,9 @@
-// ana dizinde node modulesu bul
-// bütün alt klasörlerinde gezin ve şu dosyaları ara:
-// licenses, LICENSE, LICENSE.txt
-//
-//
-//
-
 const { rejects } = require("assert");
 const { exec, execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { TextCache } = require("./cache");
+const { TextCache } = require("../cli/cache");
 
 class NodeManager {
   configFile = "package.json";
@@ -18,15 +11,14 @@ class NodeManager {
   isLocalInstalled = true;
   dependecyGraph = {};
 
-  constructor(targetPath) {
-    this.targetPath = targetPath;
+  constructor(options) {
+    this.targetPath = options.path;
     this.textcache = new TextCache(path.join(__dirname, "../Licenses"));
   }
 
   async getDependenciesGraph() {
     return new Promise((resolve, reject) => {
       {
-        // İşletim sistemini kontrol edin
         const platform = os.platform();
         let command = "";
 
@@ -56,23 +48,8 @@ class NodeManager {
 
   setLicensesToDependencies() {
     let licenseInfo = {};
-    // Object.keys(this.dependecyGraph).forEach((pkg, index, array) => {
-    //   console.log("Fetch licenses...");
-    // });
     const that = this;
     return new Promise((resolve, reject) => {
-      // const fetchLicense = (pkgName, packageInfo) => {
-      //   let licenseStdout = execSync(`npm view ${pkgName} license`);
-      //   const license = licenseStdout.toString().trim();
-      //   licenseInfo[pkgName] = license;
-      //   console.log(`${pkgName}: ${license}`);
-
-      //   for (let pkg of Object.entries(
-      //     packageInfo?.dependencies ? packageInfo.dependencies : {}
-      //   )) {
-      //     fetchLicense(pkg[0], pkg[1]);
-      //   }
-      // };
 
       const fetchLicense = () => {
         const nodeModulesPath = path.join(this.targetPath, "node_modules");
@@ -87,12 +64,12 @@ class NodeManager {
           let licenseFound = false;
           let pckName = folderPath.split("\\");
           pckName = pckName[pckName.length - 1];
-          licenseFiles.forEach((file) => {
+          licenseFiles.forEach(async (file) => {
             const filePath = path.join(folderPath, file);
             if (fs.existsSync(filePath)) {
               console.log(`Find: ${filePath}`);
-              let license  = this.textcache.compareText(pckName, filePath);
-              //console.log("license was found:", folderPath, license)
+              let license  = await this.textcache.compareText(pckName, filePath);
+              console.log("license was found:", folderPath, license)
               licenseFound = true;
             }
           });
@@ -131,10 +108,6 @@ class NodeManager {
           });
         });
       };
-
-      // for (let [pName, pInfo] of Object.entries(that.dependecyGraph)) {
-      //   fetchLicense(pName, pInfo);
-      // }
       fetchLicense();
       console.log(licenseInfo);
     });

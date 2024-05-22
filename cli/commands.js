@@ -10,7 +10,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { NodeManager } = require("./packagesManagers");
+const { NodeManager, NugetManager } = require("../clients");
 
 const crawl = (argv) => {
   fs.access(argv.file, fs.constants.F_OK, (err) => {
@@ -30,7 +30,7 @@ const crawl = (argv) => {
       "composer.json": "composer",
       "go.mod": "go",
       "Cargo.toml": "cargo",
-      ".csproj": "nuget",
+      "*/.csproj": "nuget",
       "build.gradle": "gradle",
       "pubspec.yaml": "pub",
       Podfile: "cocoapods",
@@ -61,27 +61,41 @@ const crawl = (argv) => {
 
     const managerClients = {
       node: NodeManager,
+      nuget: NugetManager,
     };
 
     // Her bir dosya için kontrol yap
-    Object.entries(configToPackageManager).forEach(([file, manager]) => {
-      const filePath = path.join(argv.file, file);
-      fs.access(filePath, fs.constants.F_OK, async (err) => {
-        if (!err) {
-          let packageManager = new managerClients[manager](argv.file);
-          if (!packageManager) {
-            console.log(`ERROR: unsupported language: '${manager}'`);
+
+    const dirPath = argv.file; // Belirtilen dizin yolu
+    fs.readdir(dirPath, async (err, files) => {
+      if (err) {
+        console.error(`ERROR: Unable to read directory: ${dirPath}`);
+        return;
+      }
+      let manager, file;
+      files.forEach((fileName) => {
+        if (!manager) {
+          file = fileName;
+          if (fileName.endsWith(".csproj")) {
+            manager = "nuget";
             return;
           }
-
-          // graph oluşturma
-          await packageManager.getDependenciesGraph();
-
-          packageManager.setLicensesToDependencies();
-
-          // Burada ilgili paket yöneticisi ile işlem yapabilirsiniz
+          manager = configToPackageManager[fileName];
         }
       });
+      if (manager) {
+        let packageManager = new managerClients[manager]({path:argv.file, file});
+
+        // graph oluşturma
+        await packageManager.getDependenciesGraph();
+        
+        packageManager.setLicensesToDependencies();
+
+        // Burada ilgili paket yöneticisi ile işlem yapabilirsiniz
+      } else {
+        console.log(`ERROR: unsupported language: '${manager}'`);
+        return;
+      }
     });
   });
 };

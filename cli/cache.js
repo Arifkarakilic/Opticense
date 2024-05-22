@@ -8,6 +8,7 @@ class TextCache {
   }
 
   loadTexts(directory) {
+    //boyutta sınırlandırma
     fs.readdir(directory, (err, files) => {
       if (err) {
         console.error("Error reading directory:", err);
@@ -29,34 +30,39 @@ class TextCache {
     });
   }
 
-  compareText(newTextPath, threshold = 0.8) {
+  compareText(packageName, newTextPath, threshold = 0.8) {
     // Threshold 0 ile 1 arasında bir değerdir
-    const matches = {};
 
     // Yeni metni oku
-    fs.readFile(newTextPath, "utf8", (err, newText) => {
-      if (err) {
-        console.error("Error reading new text file:", err);
-        return;
-      }
-
-      for (const [fileName, text] of Object.entries(this.cache)) {
-        const similarityScore = jaccardSimilarity(newText, text);
-        if (similarityScore >= threshold) {
-          matches[fileName] = {
-            //text: text,
-            similarity: similarityScore,
-          };
+    return new Promise((resolve, reject) => {
+      fs.readFile(newTextPath, "utf8", (err, newText) => {
+        if (err) {
+          console.error("Error reading new text file:", err);
+          return resolve(null);
         }
-      }
-      if (Object.values(matches).length==0 ) {
+
+        const matches = {};
+        for (const [fileName, text] of Object.entries(this.cache)) {
+          const similarityScore = jaccardSimilarity(newText, text);
+          if (similarityScore >= threshold) {
+            matches[fileName] = {
+              //text: text,
+              similarity: similarityScore,
+            };
+          }
+        }
+        if (Object.values(matches).length == 0) {
           console.log("No licenses matching existing licenses were found!");
-        }  
-          console.log("A license was found that matches the existing licenses:", matches);
+          return resolve(null);
+        }
+        //console.log(packageName, "license is:", matches);
+        resolve(matches);
+      });
     });
   }
 }
-
+//levenshteinle kıyasladım levenshtein çok daha hassas olmasına rağmen performans düşürücü bir hassasiyette çünkü yazım yanlışı ve noktalamalarda kullanılıyor.
+//
 function jaccardSimilarity(a, b) {
   const aSet = new Set(a.split(/\s+/));
   const bSet = new Set(b.split(/\s+/));
@@ -67,7 +73,7 @@ function jaccardSimilarity(a, b) {
 
 // Kullanım Örneği
 //const directory = "../Licenses"; // Klasör yolunu belirtin
- //const textCache = new TextCache(directory);
+//const textCache = new TextCache(directory);
 // setTimeout(() => {
 //     const newTextPath =
 //       "C:\\Users\\arifk\\Desktop\\licance compliance tool\\node_modules\\ansi-regex\\license"; // Karşılaştırılacak yeni metin dosya yolunu belirtin
@@ -75,6 +81,6 @@ function jaccardSimilarity(a, b) {
 //   }, 1000);
 
 // Karşılaştırma yapmak için biraz beklemek gerekebilir, çünkü dosyalar asenkron olarak yükleniyor
-module.exports ={
-    TextCache,
-}
+module.exports = {
+  TextCache,
+};
