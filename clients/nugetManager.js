@@ -11,10 +11,6 @@ const { array } = require("yargs");
 const { log } = require("console");
 
 class NugetManager {
-  configFile = "package.json";
-  packagesFolder = "node_modules";
-  isLocalInstalled = true;
-  dependecyGraph = {};
 
   constructor(options) {
     this.targetPath = options.path;

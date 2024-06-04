@@ -10,7 +10,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { NodeManager, NugetManager } = require("../clients");
+const { NodeManager, NugetManager, CargoManager } = require("../clients");
 
 const crawl = (argv) => {
   fs.access(argv.file, fs.constants.F_OK, (err) => {
@@ -42,7 +42,6 @@ const crawl = (argv) => {
       "project.clj": "lein",
       "mix.exs": "mix",
       "shard.yml": "shards",
-      "Cargo.lock": "cargo",
       "yarn.lock": "node",
       Pipfile: "pipenv",
       "Pipfile.lock": "pipenv",
@@ -62,6 +61,7 @@ const crawl = (argv) => {
     const managerClients = {
       node: NodeManager,
       nuget: NugetManager,
+      cargo: CargoManager,
     };
 
     // Her bir dosya için kontrol yap
@@ -84,11 +84,19 @@ const crawl = (argv) => {
         }
       });
       if (manager) {
-        let packageManager = new managerClients[manager]({path:argv.file, file});
+        if (!managerClients[manager]) {
+          console.log("Not Implemented Yet!");
+          return;
+        }
+
+        let packageManager = new managerClients[manager]({
+          path: argv.file,
+          file,
+        });
 
         // graph oluşturma
         await packageManager.getDependenciesGraph();
-        
+
         packageManager.setLicensesToDependencies();
 
         // Burada ilgili paket yöneticisi ile işlem yapabilirsiniz

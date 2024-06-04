@@ -90,7 +90,7 @@ class NodeManager {
           licenseFiles.forEach((file) => {
             const filePath = path.join(folderPath, file);
             if (fs.existsSync(filePath)) {
-              console.log(`Find: ${filePath}`);
+              //console.log(`Find: ${filePath}`);
               let license  = this.textcache.compareText(pckName, filePath);
               //console.log("license was found:", folderPath, license)
               licenseFound = true;

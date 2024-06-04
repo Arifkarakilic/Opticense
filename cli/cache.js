@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { jaccardSimilarity } = require("./compare");
 
 class TextCache {
   constructor(directory) {
@@ -30,7 +31,7 @@ class TextCache {
     });
   }
 
-  compareText(packageName, newTextPath, threshold = 0.8) {
+  compareText(packageName, newTextPath, threshold = 0.85) {
     // Threshold 0 ile 1 arasında bir değerdir
 
     // Yeni metni oku
@@ -63,24 +64,7 @@ class TextCache {
 }
 //levenshteinle kıyasladım levenshtein çok daha hassas olmasına rağmen performans düşürücü bir hassasiyette çünkü yazım yanlışı ve noktalamalarda kullanılıyor.
 //
-function jaccardSimilarity(a, b) {
-  const aSet = new Set(a.split(/\s+/));
-  const bSet = new Set(b.split(/\s+/));
-  const intersection = new Set([...aSet].filter((x) => bSet.has(x)));
-  const union = new Set([...aSet, ...bSet]);
-  return intersection.size / union.size;
-}
 
-// Kullanım Örneği
-//const directory = "../Licenses"; // Klasör yolunu belirtin
-//const textCache = new TextCache(directory);
-// setTimeout(() => {
-//     const newTextPath =
-//       "C:\\Users\\arifk\\Desktop\\licance compliance tool\\node_modules\\ansi-regex\\license"; // Karşılaştırılacak yeni metin dosya yolunu belirtin
-//     textCache.compareText(newTextPath);
-//   }, 1000);
-
-// Karşılaştırma yapmak için biraz beklemek gerekebilir, çünkü dosyalar asenkron olarak yükleniyor
 module.exports = {
   TextCache,
 };
