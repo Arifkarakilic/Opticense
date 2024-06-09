@@ -3,7 +3,7 @@ const { exec, execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { TextCache } = require("../cli/cache");
+const { TextCache } = require("../src/cache");
 
 class NodeManager {
   configFile = "package.json";
@@ -40,8 +40,8 @@ class NodeManager {
         //   this.dependecyGraph = JSON.parse(stdout).dependencies;
         //   console.log("Dependency graph created.");
         //   //console.log(this.dependecyGraph);
-      //});
-          resolve();
+        //});
+        resolve();
       }
     }).catch();
   }
@@ -50,7 +50,6 @@ class NodeManager {
     let licenseInfo = {};
     const that = this;
     return new Promise((resolve, reject) => {
-
       const fetchLicense = () => {
         const nodeModulesPath = path.join(this.targetPath, "node_modules");
 
@@ -68,8 +67,8 @@ class NodeManager {
             const filePath = path.join(folderPath, file);
             if (fs.existsSync(filePath)) {
               //console.log(`Find: ${filePath}`);
-              let license  = await this.textcache.compareText(pckName, filePath);
-              console.log("license was found:", folderPath, license)
+              let license = await this.textcache.compareText(pckName, filePath);
+              console.log({ name: pckName, license });
               licenseFound = true;
             }
           });

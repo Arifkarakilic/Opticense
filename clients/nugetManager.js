@@ -1,17 +1,14 @@
-
-
 const { rejects } = require("assert");
 const { exec, execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { TextCache } = require("../cli/cache");
+const { TextCache } = require("../src/cache");
 const xml2js = require("xml2js");
 const { array } = require("yargs");
 const { log } = require("console");
 
 class NugetManager {
-
   constructor(options) {
     this.targetPath = options.path;
     this.file = options.file;
@@ -98,10 +95,10 @@ class NugetManager {
                 return;
               }
 
-              let license = {name:pkg.include, ...(await this.textcache.compareText(
-                pkg.include,
-                filePath
-              ))};
+              let license = {
+                name: pkg.include,
+                ...(await this.textcache.compareText(pkg.include, filePath)),
+              };
               console.log(license);
             });
           });
@@ -119,7 +116,8 @@ class NugetManager {
               return;
             }
             log({
-               name: pkg.include , [data]: { similarity: 1 },
+              name: pkg.include,
+              [data]: { similarity: 1 },
               note: "This license type came from the nuspec file.",
             });
           }
@@ -150,7 +148,6 @@ class NugetManager {
                   files[files.length - 1]
                 )
               );
-
             }
           );
           return;

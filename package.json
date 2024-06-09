@@ -1,8 +1,9 @@
 {
-  "name": "licance-compliance-tool",
-  "version": "0.0.1",
+  "name": "opticense",
+  "version": "0.8.0",
   "description": "",
   "main": "index.js",
+  "bin": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit.git"
   },
-  "author": "Arif KARAKILIC",
+  "author": "Arif KARAKILIC & Alihan SARAC",
   "license": "AGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit/issues"
@@ -21,5 +22,16 @@
     "toml": "^3.0.0",
     "xml2js": "^0.6.2",
     "yargs": "^17.7.2"
+  },
+  "pkg": {
+    "assets": [
+      "Licenses/**/*",
+      "src/**/*"
+    ],
+    "targets": [
+      "node14-linux-x64",
+      "node14-macos-x64",
+      "node14-win-x64"
+    ]
   }
 }
