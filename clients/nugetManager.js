@@ -59,7 +59,6 @@ class NugetManager {
           });
         }
 
-        //console.log(packageReferences);
         this.findNugetPackages(packageReferences);
       });
     });

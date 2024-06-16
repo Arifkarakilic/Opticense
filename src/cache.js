@@ -58,7 +58,6 @@ class TextCache {
   }
 }
 
-
 module.exports = {
   TextCache,
 };

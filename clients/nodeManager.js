@@ -19,28 +19,6 @@ class NodeManager {
   async getDependenciesGraph() {
     return new Promise((resolve, reject) => {
       {
-        // const platform = os.platform();
-        // let command = "";
-
-        // if (platform === "win32") {
-        //   // Windows komutu
-        //   command = "npm list --depth=9999 --json 2>nul";
-        // } else {
-        //   // Unix tabanlı sistemler için komut
-        //   command = "npm list --depth=9999 --json 2>/dev/null";
-        // }
-        // //read p.json
-        // //  get dep name depth=9999
-        // console.log("Dependency graph creating...");
-        // exec(command, { cwd: this.targetPath }, (error, stdout, stderr) => {
-        //   if (error) {
-        //     console.error(`exec error: ${error}`);
-        //     return reject();
-        //   }
-        //   this.dependecyGraph = JSON.parse(stdout).dependencies;
-        //   console.log("Dependency graph created.");
-        //   //console.log(this.dependecyGraph);
-        //});
         resolve();
       }
     }).catch();

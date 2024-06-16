@@ -35,7 +35,6 @@ class CargoManager {
         const parsed = toml.parse(data);
         const packageReferences = [];
 
-        // Extract dependencies from [dependencies]
         if (parsed.dependencies) {
           Object.keys(parsed.dependencies).forEach((key) => {
             const version = parsed.dependencies[key];
@@ -43,7 +42,6 @@ class CargoManager {
           });
         }
 
-        // Extract dependencies from [dev-dependencies]
         if (parsed["dev-dependencies"]) {
           Object.keys(parsed["dev-dependencies"]).forEach((key) => {
             const version = parsed["dev-dependencies"][key];
@@ -51,7 +49,6 @@ class CargoManager {
           });
         }
 
-        // Extract dependencies from [target.*.dependencies]
         if (parsed.target) {
           Object.keys(parsed.target).forEach((targetKey) => {
             if (parsed.target[targetKey].dependencies) {
@@ -64,7 +61,6 @@ class CargoManager {
             }
           });
         }
-        //console.log(packageReferences);
         this.findCargoLicenses(packageReferences);
       } catch (err) {
         console.error("Error parsing TOML:", err);
@@ -113,7 +109,6 @@ class CargoManager {
         `${pkg.include.toLowerCase()}-`
       );
 
-      // Find the subdirectory with the unique ID
       const subDirs = fs
         .readdirSync(cargoPath)
         .filter((dir) => dir.includes("index.crates.io-"));
@@ -124,7 +119,6 @@ class CargoManager {
 
       const registryPath = path.join(cargoPath, subDirs[0]);
 
-      // Find all directories matching the package name prefix
       const versions = fs
         .readdirSync(registryPath)
         .filter((dir) => dir.startsWith(`${pkg.include.toLowerCase()}-`));
@@ -133,7 +127,6 @@ class CargoManager {
         return;
       }
 
-      // Sort versions and pick the highest one
       versions.sort((a, b) => {
         const versionA = a.match(/-(\d+\.\d+\.\d+(?:\+\w+\.\d+\.\d+)?)/);
         const versionB = b.match(/-(\d+\.\d+\.\d+(?:\+\w+\.\d+\.\d+)?)/);
