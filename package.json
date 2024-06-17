@@ -1,7 +1,7 @@
 {
   "name": "opticense",
   "version": "0.8.0",
-  "description": "",
+  "description": "Optimal and fast open source License Compliance Tool",
   "main": "index.js",
   "bin": "src/index.js",
   "scripts": {
@@ -9,14 +9,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit.git"
+    "url": "https://github.com/Arifkarakilic/Opticense.git"
   },
-  "author": "Arif KARAKILIC & Alihan SARAC",
+  "author": "Arif KARAKILIC",
+  "contributors": [
+    {
+      "name": "Arif KARAKILIC"
+    },
+    {
+      "name": "Alihan SARAC",
+      "email": "saracalihan@gmail.com",
+      "url": "http://www.saracalihan.com/"
+    }
+  ],
+
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit/issues"
+    "url": "https://github.com/Arifkarakilic/Opticense/issues"
   },
-  "homepage": "https://github.com/Arifkarakilic/CodeThreat-Licencse-Compliance-Toolkit#readme",
+  "homepage": "https://github.com/Arifkarakilic/Opticense#readme",
   "dependencies": {
     "fs": "^0.0.1-security",
     "toml": "^3.0.0",
@@ -25,7 +36,7 @@
   },
   "pkg": {
     "assets": [
-      "Licenses/**/*",
+      "licenses/**/*",
       "src/**/*"
     ],
     "targets": [
